@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id            String   @id @default(cuid())
+  year          Int
+  make          String
+  model         String
+  trim          String?
+  price         Float
+  mileage       Int
+  color         String
+  vin           String?  @unique
+  engine        String?
+  transmission  String?
+  fuelType      String?
+  condition     String?
+  vehicleType   String
+  status        String
+  dailyRate     Float?
+  weeklyRate    Float?
+  featured      Boolean  @default(false)
+  images        String
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  inquiries     ContactInquiry[]
+  rentalApps    RentalApplication[]
+  purchaseApps  PurchaseApplication[]
+}
+
+model ContactInquiry {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  vehicleId   String?
+  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id])
+  message     String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  name        String
+  rating      Int
+  text        String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+}
+
+model RentalApplication {
+  id              String   @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  customerEmail   String
+  customerAddress String
+  driverLicense   String?
+  vehicleId       String
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
+  startDate       String
+  endDate         String
+  hasInsurance    Boolean
+  insuranceDoc    String?
+  dealerInsurance Float?
+  agreedToTerms   Boolean
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+}
+
+model PurchaseApplication {
+  id              String   @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  customerEmail   String
+  customerAddress String
+  vehicleId       String
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
+  agreedToTerms   Boolean
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+}
+
+model WholesaleVehicle {
+  id          String   @id @default(cuid())
+  year        Int
+  make        String
+  model       String
+  price       Float
+  mileage     Int
+  location    String
+  radius      Int
+  images      String
+  description String?
+  status      String   @default("available")
+  createdAt   DateTime @default(now())
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
