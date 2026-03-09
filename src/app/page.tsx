@@ -20,7 +20,6 @@ import {
   ShoppingCart, Truck, MessageSquare, Clock, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { LoginModal } from '@/components/LoginModal';
 
 // Types
 interface Vehicle {
@@ -234,12 +233,11 @@ const parseImages = (imagesStr: string) => { try { return JSON.parse(imagesStr);
 
 // Navigation Component
 function Navigation({ 
-  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen, isAdmin, handleAdminClick, isAuthenticated, handleLogout
+  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen, isAdmin, setIsAdmin
 }: { 
   activeSection: string; setActiveSection: (s: string) => void;
   mobileMenuOpen: boolean; setMobileMenuOpen: (b: boolean) => void;
-  isAdmin: boolean; handleAdminClick: () => void;
-  isAuthenticated: boolean; handleLogout: () => void;
+  isAdmin: boolean; setIsAdmin: (b: boolean) => void;
 }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-red-900/20">
@@ -256,23 +254,10 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            {isAuthenticated ? (
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleAdminClick}
-                  className={`border-red-500 ${isAdmin ? 'bg-red-500 text-white' : 'text-red-500'}`}>
-                  <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Close Admin' : 'Admin'}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={handleLogout}
-                  className="text-gray-400 hover:text-white">
-                  Logout
-                </Button>
-              </div>
-            ) : (
-              <Button variant="outline" size="sm" onClick={handleAdminClick}
-                className="border-red-500 text-red-500">
-                <Settings className="h-4 w-4 mr-1" />Admin
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={() => setIsAdmin(!isAdmin)}
+              className={`border-red-500 ${isAdmin ? 'bg-red-500 text-white' : 'text-red-500'}`}>
+              <Settings className="h-4 w-4 mr-1" />Admin
+            </Button>
           </div>
           <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -288,23 +273,10 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            {isAuthenticated ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => { handleAdminClick(); setMobileMenuOpen(false); }}
-                  className="w-full border-red-500 text-red-500">
-                  <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Close Admin' : 'Admin Panel'}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                  className="w-full text-gray-400 hover:text-white">
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <Button variant="outline" size="sm" onClick={() => { handleAdminClick(); setMobileMenuOpen(false); }}
-                className="w-full border-red-500 text-red-500">
-                <Settings className="h-4 w-4 mr-1" />Admin Panel
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={() => { setIsAdmin(!isAdmin); setMobileMenuOpen(false); }}
+              className="w-full border-red-500 text-red-500">
+              <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Exit Admin' : 'Admin Panel'}
+            </Button>
           </div>
         </div>
       )}
@@ -1182,8 +1154,6 @@ export default function MainPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminTab, setAdminTab] = useState('vehicles');
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // Data States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -1257,15 +1227,6 @@ export default function MainPage() {
       } catch { /* handled */ }
     };
     loadData();
-    // Check authentication status
-    const checkAuth = async () => {
-      try {
-        const res = await fetch('/api/auth');
-        const data = await res.json();
-        setIsAuthenticated(data.authenticated);
-      } catch { /* not authenticated */ }
-    };
-    checkAuth();
   }, []);
 
   useEffect(() => {
@@ -1282,33 +1243,6 @@ export default function MainPage() {
   }, [isAdmin]);
 
   const featuredVehicles = vehicles.filter(v => v.featured);
-
-  // Admin authentication handlers
-  const handleAdminClick = () => {
-    if (isAuthenticated) {
-      setIsAdmin(!isAdmin);
-    } else {
-      setShowLoginModal(true);
-    }
-  };
-
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
-    setIsAdmin(true);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'logout' }),
-      });
-    } catch { /* ignore */ }
-    setIsAuthenticated(false);
-    setIsAdmin(false);
-    toast.success('Logged out successfully');
-  };
 
   // CRUD Operations
   const handleAddVehicle = async () => {
@@ -1422,7 +1356,7 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} isAdmin={isAdmin} handleAdminClick={handleAdminClick} isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
       <main className="pt-16">
         {activeSection === 'home' && (
           <>
@@ -1441,7 +1375,6 @@ export default function MainPage() {
       <PurchaseModal showPurchaseModal={showPurchaseModal} setShowPurchaseModal={setShowPurchaseModal} selectedVehicle={selectedVehicle} purchaseForm={purchaseForm} setPurchaseForm={setPurchaseForm} handlePurchaseSubmit={handlePurchaseSubmit} />
       <RentalModal showRentalModal={showRentalModal} setShowRentalModal={setShowRentalModal} selectedVehicle={selectedVehicle} rentalForm={rentalForm} setRentalForm={setRentalForm} handleRentalSubmit={handleRentalSubmit} />
       <ReviewModal showReviewModal={showReviewModal} setShowReviewModal={setShowReviewModal} reviewForm={reviewForm} setReviewForm={setReviewForm} handleReviewSubmit={handleReviewSubmit} />
-      <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} onLoginSuccess={handleLoginSuccess} />
     </div>
   );
 }
