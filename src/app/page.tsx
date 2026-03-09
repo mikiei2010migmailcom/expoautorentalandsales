@@ -233,11 +233,10 @@ const parseImages = (imagesStr: string) => { try { return JSON.parse(imagesStr);
 
 // Navigation Component
 function Navigation({ 
-  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen, isAdmin, setIsAdmin
+  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen
 }: { 
   activeSection: string; setActiveSection: (s: string) => void;
   mobileMenuOpen: boolean; setMobileMenuOpen: (b: boolean) => void;
-  isAdmin: boolean; setIsAdmin: (b: boolean) => void;
 }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-red-900/20">
@@ -254,9 +253,9 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={() => setIsAdmin(!isAdmin)}
-              className={`border-red-500 ${isAdmin ? 'bg-red-500 text-white' : 'text-red-500'}`}>
-              <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Exit Admin' : 'Admin'}
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin'}
+              className="border-red-500 text-red-500">
+              <Settings className="h-4 w-4 mr-1" />Admin
             </Button>
           </div>
           <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -273,9 +272,9 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={() => { setIsAdmin(!isAdmin); setMobileMenuOpen(false); }}
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin'}
               className="w-full border-red-500 text-red-500">
-              <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Exit Admin' : 'Admin Panel'}
+              <Settings className="h-4 w-4 mr-1" />Admin
             </Button>
           </div>
         </div>
@@ -1365,7 +1364,7 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
       <main className="pt-16">
         {activeSection === 'home' && (
           <>
@@ -1379,7 +1378,6 @@ export default function MainPage() {
         {activeSection === 'contact' && <ContactSection vehicles={vehicles} contactForm={contactForm} setContactForm={setContactForm} handleContactSubmit={handleContactSubmit} />}
       </main>
       <Footer setActiveSection={setActiveSection} />
-      <AdminDashboard isAdmin={isAdmin} setIsAdmin={setIsAdmin} adminTab={adminTab} setAdminTab={setAdminTab} vehicles={vehicles} handleDeleteVehicle={handleDeleteVehicle} setShowVehicleForm={setShowVehicleForm} setEditingVehicle={setEditingVehicle} setVehicleForm={setVehicleForm} allReviews={allReviews} handleApproveReview={handleApproveReview} handleDeleteReview={handleDeleteReview} inquiries={inquiries} handleDeleteInquiry={handleDeleteInquiry} handleMarkInquiryRead={handleMarkInquiryRead} rentalApps={rentalApps} handleRentalStatus={handleRentalStatus} purchaseApps={purchaseApps} wholesaleVehicles={wholesaleVehicles} wholesaleForm={wholesaleForm} setWholesaleForm={setWholesaleForm} handleWholesaleSubmit={handleWholesaleSubmit} handleDeleteWholesale={handleDeleteWholesale} />
       <VehicleFormModal showVehicleForm={showVehicleForm} setShowVehicleForm={setShowVehicleForm} editingVehicle={editingVehicle} setEditingVehicle={setEditingVehicle} vehicleForm={vehicleForm} setVehicleForm={setVehicleForm} handleAddVehicle={handleAddVehicle} handleUpdateVehicle={handleUpdateVehicle} handleImageUpload={handleImageUpload} generateVehicleImage={generateVehicleImage} isGeneratingImage={isGeneratingImage} />
       <PurchaseModal showPurchaseModal={showPurchaseModal} setShowPurchaseModal={setShowPurchaseModal} selectedVehicle={selectedVehicle} purchaseForm={purchaseForm} setPurchaseForm={setPurchaseForm} handlePurchaseSubmit={handlePurchaseSubmit} />
       <RentalModal showRentalModal={showRentalModal} setShowRentalModal={setShowRentalModal} selectedVehicle={selectedVehicle} rentalForm={rentalForm} setRentalForm={setRentalForm} handleRentalSubmit={handleRentalSubmit} />
