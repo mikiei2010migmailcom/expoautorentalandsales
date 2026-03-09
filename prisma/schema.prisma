@@ -34,6 +34,10 @@ model Vehicle {
   description   String?
   createdAt     DateTime @default(now())
 
+  rentalApplications     RentalApplication[]
+  purchaseApplications   PurchaseApplication[]
+  contactInquiries       ContactInquiry[]
+
   @@index([make, model])
   @@index([status])
   @@index([vehicleType])
@@ -60,6 +64,8 @@ model ContactInquiry {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
 
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id])
+
   @@index([read])
   @@index([vehicleId])
 }
@@ -81,6 +87,8 @@ model RentalApplication {
   status           String   @default("pending")
   createdAt        DateTime @default(now())
 
+  vehicle          Vehicle  @relation(fields: [vehicleId], references: [id])
+
   @@index([status])
   @@index([vehicleId])
 }
@@ -95,6 +103,8 @@ model PurchaseApplication {
   agreedToTerms   Boolean  @default(false)
   status          String   @default("pending")
   createdAt       DateTime @default(now())
+
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
 
   @@index([status])
   @@index([vehicleId])
