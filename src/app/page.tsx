@@ -20,7 +20,6 @@ import {
   ShoppingCart, Truck, MessageSquare, Clock, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { LoginModal } from '@/components/LoginModal';
 
 // Types
 interface Vehicle {
@@ -234,11 +233,11 @@ const parseImages = (imagesStr: string) => { try { return JSON.parse(imagesStr);
 
 // Navigation Component
 function Navigation({ 
-  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen, isAdmin, onAdminClick
+  activeSection, setActiveSection, mobileMenuOpen, setMobileMenuOpen, isAdmin, setIsAdmin
 }: { 
   activeSection: string; setActiveSection: (s: string) => void;
   mobileMenuOpen: boolean; setMobileMenuOpen: (b: boolean) => void;
-  isAdmin: boolean; onAdminClick: () => void;
+  isAdmin: boolean; setIsAdmin: (b: boolean) => void;
 }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-red-900/20">
@@ -255,7 +254,7 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={onAdminClick}
+            <Button variant="outline" size="sm" onClick={() => setIsAdmin(!isAdmin)}
               className={`border-red-500 ${isAdmin ? 'bg-red-500 text-white' : 'text-red-500'}`}>
               <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Exit Admin' : 'Admin'}
             </Button>
@@ -274,7 +273,7 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={() => { onAdminClick(); setMobileMenuOpen(false); }}
+            <Button variant="outline" size="sm" onClick={() => { setIsAdmin(!isAdmin); setMobileMenuOpen(false); }}
               className="w-full border-red-500 text-red-500">
               <Settings className="h-4 w-4 mr-1" />{isAdmin ? 'Exit Admin' : 'Admin Panel'}
             </Button>
@@ -1155,7 +1154,6 @@ export default function MainPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminTab, setAdminTab] = useState('vehicles');
-  const [showLoginModal, setShowLoginModal] = useState(false);
   
   // Data States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -1178,20 +1176,6 @@ export default function MainPage() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showVehicleForm, setShowVehicleForm] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
-  
-  // Admin click handler
-  const handleAdminClick = () => {
-    if (isAdmin) {
-      setIsAdmin(false);
-    } else {
-      setShowLoginModal(true);
-    }
-  };
-  
-  const handleLoginSuccess = () => {
-    setIsAdmin(true);
-    toast.success('Welcome to Admin Panel');
-  };
   
   // Form States
   const [purchaseForm, setPurchaseForm] = useState({ customerName: '', customerPhone: '', customerEmail: '', customerAddress: '', agreedToTerms: false });
@@ -1372,7 +1356,7 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} isAdmin={isAdmin} onAdminClick={handleAdminClick} />
+      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
       <main className="pt-16">
         {activeSection === 'home' && (
           <>
@@ -1391,7 +1375,6 @@ export default function MainPage() {
       <PurchaseModal showPurchaseModal={showPurchaseModal} setShowPurchaseModal={setShowPurchaseModal} selectedVehicle={selectedVehicle} purchaseForm={purchaseForm} setPurchaseForm={setPurchaseForm} handlePurchaseSubmit={handlePurchaseSubmit} />
       <RentalModal showRentalModal={showRentalModal} setShowRentalModal={setShowRentalModal} selectedVehicle={selectedVehicle} rentalForm={rentalForm} setRentalForm={setRentalForm} handleRentalSubmit={handleRentalSubmit} />
       <ReviewModal showReviewModal={showReviewModal} setShowReviewModal={setShowReviewModal} reviewForm={reviewForm} setReviewForm={setReviewForm} handleReviewSubmit={handleReviewSubmit} />
-      <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} onLoginSuccess={handleLoginSuccess} />
     </div>
   );
 }
