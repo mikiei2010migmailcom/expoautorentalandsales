@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -332,7 +332,10 @@ export default function AdminDashboard() {
 
       <Dialog open={showVehicleForm} onOpenChange={setShowVehicleForm}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700">
-          <DialogHeader><DialogTitle className="text-white">{editingVehicle ? 'Edit' : 'Add'} Vehicle</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle className="text-white">{editingVehicle ? 'Edit' : 'Add'} Vehicle</DialogTitle>
+            <DialogDescription className="text-gray-400">Fill in the vehicle details below.</DialogDescription>
+          </DialogHeader>
           <form onSubmit={(e) => { e.preventDefault(); if (editingVehicle) { handleUpdateVehicle(); } else { handleAddVehicle(); } }}>
             <div className="grid grid-cols-2 gap-4">
               <div><Label className="text-gray-300">Year *</Label><Input value={vehicleForm.year} onChange={e => setVehicleForm({ ...vehicleForm, year: e.target.value })} className="bg-gray-700 border-gray-600 text-white" required /></div>

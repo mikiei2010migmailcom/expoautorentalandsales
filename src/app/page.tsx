@@ -649,7 +649,10 @@ function VehicleFormModal({
   return (
     <Dialog open={showVehicleForm} onOpenChange={setShowVehicleForm}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700">
-        <DialogHeader><DialogTitle className="text-white">{editingVehicle ? 'Edit Vehicle' : 'Add New Vehicle'}</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle className="text-white">{editingVehicle ? 'Edit Vehicle' : 'Add New Vehicle'}</DialogTitle>
+          <DialogDescription className="text-gray-400">Fill in the vehicle details below.</DialogDescription>
+        </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <div><Label className="text-gray-300">Year *</Label><Input value={vehicleForm.year} onChange={e => setVehicleForm({ ...vehicleForm, year: e.target.value })} className="bg-gray-700 border-gray-600 text-white" required /></div>
@@ -903,7 +906,10 @@ function ReviewModal({ showReviewModal, setShowReviewModal, reviewForm, setRevie
   return (
     <Dialog open={showReviewModal} onOpenChange={setShowReviewModal}>
       <DialogContent className="bg-gray-900 border-gray-700">
-        <DialogHeader><DialogTitle className="text-white">Leave a Review</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle className="text-white">Leave a Review</DialogTitle>
+          <DialogDescription className="text-gray-400">Share your experience with us.</DialogDescription>
+        </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div><Label className="text-gray-300">Your Name</Label><Input value={reviewForm.name} onChange={e => setReviewForm({ ...reviewForm, name: e.target.value })} className="bg-gray-700 border-gray-600 text-white" required /></div>
@@ -948,7 +954,10 @@ function AdminDashboard({
   return (
     <Dialog open={isAdmin} onOpenChange={setIsAdmin}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden bg-gray-900 border-gray-700">
-        <DialogHeader><DialogTitle className="text-white text-2xl">Admin Dashboard</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle className="text-white text-2xl">Admin Dashboard</DialogTitle>
+          <DialogDescription className="text-gray-400">Manage your vehicles, reviews, and applications.</DialogDescription>
+        </DialogHeader>
         <Tabs value={adminTab} onValueChange={setAdminTab} className="w-full">
           <TabsList className="bg-gray-800 w-full justify-start flex-wrap h-auto gap-1 p-1">
             <TabsTrigger value="vehicles" className="data-[state=active]:bg-red-600">Vehicles</TabsTrigger>
