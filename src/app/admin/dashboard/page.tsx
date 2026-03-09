@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Car, Star, Plus, Edit, Trash2, Eye, Check, Upload, Image as ImageIcon, LogOut, Loader2, X } from 'lucide-react';
+import { Car, Star, Plus, Edit, Trash2, Eye, Check, Upload, Image as ImageIcon, LogOut, Loader2, X, Settings, User, Key, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 
 const formatPrice = (price: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(price);
@@ -46,6 +46,15 @@ export default function AdminDashboard() {
     radius: '250', images: [] as string[], description: ''
   });
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+
+  // Settings state
+  const [settingsForm, setSettingsForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    newAdminUsername: '',
+    newAdminPassword: ''
+  });
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -158,6 +167,73 @@ export default function AdminDashboard() {
     finally { setIsGeneratingImage(false); }
   };
 
+  // Settings functions
+  const handleChangePassword = async () => {
+    if (!settingsForm.currentPassword || !settingsForm.newPassword || !settingsForm.confirmPassword) {
+      toast.error('Please fill in all password fields');
+      return;
+    }
+    if (settingsForm.newPassword !== settingsForm.confirmPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+    if (settingsForm.newPassword.length < 6) {
+      toast.error('New password must be at least 6 characters');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'changePassword',
+          currentPassword: settingsForm.currentPassword,
+          newPassword: settingsForm.newPassword
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Password changed successfully');
+        setSettingsForm({ ...settingsForm, currentPassword: '', newPassword: '', confirmPassword: '' });
+      } else {
+        toast.error(data.error || 'Failed to change password');
+      }
+    } catch {
+      toast.error('Failed to change password');
+    }
+  };
+
+  const handleAddAdmin = async () => {
+    if (!settingsForm.newAdminUsername || !settingsForm.newAdminPassword) {
+      toast.error('Please fill in username and password');
+      return;
+    }
+    if (settingsForm.newAdminPassword.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'addAdmin',
+          username: settingsForm.newAdminUsername,
+          password: settingsForm.newAdminPassword
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Admin user added successfully');
+        setSettingsForm({ ...settingsForm, newAdminUsername: '', newAdminPassword: '' });
+      } else {
+        toast.error(data.error || 'Failed to add admin');
+      }
+    } catch {
+      toast.error('Failed to add admin');
+    }
+  };
+
   if (loading) return <div className="min-h-screen bg-gray-900 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-red-500" /></div>;
   if (!authenticated) return null;
 
@@ -182,6 +258,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="rentals" className="data-[state=active]:bg-red-600">Rentals ({rentalApps.length})</TabsTrigger>
             <TabsTrigger value="purchases" className="data-[state=active]:bg-red-600">Purchases ({purchaseApps.length})</TabsTrigger>
             <TabsTrigger value="wholesale" className="data-[state=active]:bg-red-600">Wholesale</TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-red-600"><Settings className="h-4 w-4 mr-1" />Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="vehicles">
@@ -325,6 +402,111 @@ export default function AdminDashboard() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <h2 className="text-white text-xl font-semibold flex items-center gap-2"><Settings className="h-5 w-5" /> Admin Settings</h2>
+              
+              {/* Change Password Section */}
+              <Card className="bg-gray-800 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-base flex items-center gap-2">
+                    <Key className="h-4 w-4" /> Change Password
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-gray-300">Current Password</Label>
+                    <Input 
+                      type="password" 
+                      value={settingsForm.currentPassword} 
+                      onChange={e => setSettingsForm({ ...settingsForm, currentPassword: e.target.value })} 
+                      className="bg-gray-700 border-gray-600 text-white" 
+                      placeholder="Enter current password"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">New Password</Label>
+                    <Input 
+                      type="password" 
+                      value={settingsForm.newPassword} 
+                      onChange={e => setSettingsForm({ ...settingsForm, newPassword: e.target.value })} 
+                      className="bg-gray-700 border-gray-600 text-white" 
+                      placeholder="Enter new password (min 6 characters)"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Confirm New Password</Label>
+                    <Input 
+                      type="password" 
+                      value={settingsForm.confirmPassword} 
+                      onChange={e => setSettingsForm({ ...settingsForm, confirmPassword: e.target.value })} 
+                      className="bg-gray-700 border-gray-600 text-white" 
+                      placeholder="Confirm new password"
+                    />
+                  </div>
+                  <Button onClick={handleChangePassword} className="bg-red-600 hover:bg-red-700">
+                    <Key className="h-4 w-4 mr-2" /> Update Password
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Add New Admin Section */}
+              <Card className="bg-gray-800 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-base flex items-center gap-2">
+                    <UserPlus className="h-4 w-4" /> Add New Admin User
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-gray-300">New Username</Label>
+                    <Input 
+                      type="text" 
+                      value={settingsForm.newAdminUsername} 
+                      onChange={e => setSettingsForm({ ...settingsForm, newAdminUsername: e.target.value })} 
+                      className="bg-gray-700 border-gray-600 text-white" 
+                      placeholder="Enter username for new admin"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">New Admin Password</Label>
+                    <Input 
+                      type="password" 
+                      value={settingsForm.newAdminPassword} 
+                      onChange={e => setSettingsForm({ ...settingsForm, newAdminPassword: e.target.value })} 
+                      className="bg-gray-700 border-gray-600 text-white" 
+                      placeholder="Enter password (min 6 characters)"
+                    />
+                  </div>
+                  <Button onClick={handleAddAdmin} className="bg-red-600 hover:bg-red-700">
+                    <UserPlus className="h-4 w-4 mr-2" /> Add Admin User
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Current Admin Info */}
+              <Card className="bg-gray-800 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-base flex items-center gap-2">
+                    <User className="h-4 w-4" /> Default Credentials (Environment)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-400 text-sm mb-2">
+                    Default credentials are set via environment variables:
+                  </p>
+                  <div className="bg-gray-900 rounded p-3 font-mono text-sm">
+                    <p className="text-gray-300">Username: <span className="text-red-400">admin</span></p>
+                    <p className="text-gray-300">Password: <span className="text-red-400">ExpoAuto2024!</span></p>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-2">
+                    To change default credentials, set ADMIN_USERNAME and ADMIN_PASSWORD in Vercel environment variables.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>
