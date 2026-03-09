@@ -1,13 +1,16 @@
 import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
 import crypto from 'crypto';
-
-// Admin credentials - in production, these should be in environment variables
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || hashPassword('ExpoAuto2024!');
 
 // Session secret for signing tokens
 const SESSION_SECRET = process.env.SESSION_SECRET || 'expo-auto-rentals-secret-key-2024';
+
+// Admin credentials - computed lazily to avoid build-time issues
+function getAdminCredentials() {
+  return {
+    username: process.env.ADMIN_USERNAME || 'admin',
+    passwordHash: process.env.ADMIN_PASSWORD_HASH || hashPassword('ExpoAuto2024!')
+  };
+}
 
 // Hash password using SHA-256
 export function hashPassword(password: string): string {
@@ -58,7 +61,8 @@ export function verifySessionToken(token: string): { username: string; exp: numb
 
 // Verify credentials
 export function verifyCredentials(username: string, password: string): boolean {
-  return username === ADMIN_USERNAME && hashPassword(password) === ADMIN_PASSWORD_HASH;
+  const creds = getAdminCredentials();
+  return username === creds.username && hashPassword(password) === creds.passwordHash;
 }
 
 // Get current session from cookies
