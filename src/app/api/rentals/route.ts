@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all rental applications
 export async function GET(request: NextRequest) {
   try {
-    const applications = await prisma.rentalApplication.findMany({
+    const applications = await db.rentalApplication.findMany({
       include: { vehicle: true },
       orderBy: { createdAt: 'desc' }
     });
@@ -23,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const application = await prisma.rentalApplication.create({
+    const application = await db.rentalApplication.create({
       data: {
         customerName: data.customerName,
         customerPhone: data.customerPhone,
@@ -31,12 +29,12 @@ export async function POST(request: NextRequest) {
         customerAddress: data.customerAddress,
         driverLicense: data.driverLicense || null,
         vehicleId: data.vehicleId,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        hasInsurance: data.hasInsurance,
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+        hasInsurance: data.hasInsurance || false,
         insuranceDoc: data.insuranceDoc || null,
         dealerInsurance: data.dealerInsurance ? parseFloat(data.dealerInsurance) : null,
-        agreedToTerms: data.agreedToTerms,
+        agreedToTerms: data.agreedToTerms || false,
         status: 'pending'
       }
     });

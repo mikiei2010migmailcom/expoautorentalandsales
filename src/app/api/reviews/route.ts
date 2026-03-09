@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all reviews
 export async function GET(request: NextRequest) {
@@ -12,7 +10,7 @@ export async function GET(request: NextRequest) {
     const where: any = {};
     if (status) where.status = status;
 
-    const reviews = await prisma.review.findMany({
+    const reviews = await db.review.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     });
@@ -29,7 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const review = await prisma.review.create({
+    const review = await db.review.create({
       data: {
         name: data.name,
         rating: parseInt(data.rating),

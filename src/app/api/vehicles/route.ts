@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all vehicles
 export async function GET(request: NextRequest) {
@@ -16,7 +14,7 @@ export async function GET(request: NextRequest) {
     if (vehicleType) where.vehicleType = vehicleType;
     if (featured === 'true') where.featured = true;
 
-    const vehicles = await prisma.vehicle.findMany({
+    const vehicles = await db.vehicle.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     });
@@ -33,7 +31,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const vehicle = await prisma.vehicle.create({
+    const vehicle = await db.vehicle.create({
       data: {
         year: parseInt(data.year),
         make: data.make,

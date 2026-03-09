@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch single vehicle
 export async function GET(
@@ -10,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const vehicle = await prisma.vehicle.findUnique({
+    const vehicle = await db.vehicle.findUnique({
       where: { id }
     });
 
@@ -55,7 +53,7 @@ export async function PUT(
     if (data.images) updateData.images = JSON.stringify(data.images);
     if (data.description !== undefined) updateData.description = data.description || null;
 
-    const vehicle = await prisma.vehicle.update({
+    const vehicle = await db.vehicle.update({
       where: { id },
       data: updateData
     });
@@ -74,7 +72,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.vehicle.delete({
+    await db.vehicle.delete({
       where: { id }
     });
 

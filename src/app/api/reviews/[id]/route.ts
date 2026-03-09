@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // PUT - Update review (approve/reject)
 export async function PUT(
@@ -12,12 +10,9 @@ export async function PUT(
     const { id } = await params;
     const data = await request.json();
 
-    const updateData: any = {};
-    if (data.status) updateData.status = data.status;
-
-    const review = await prisma.review.update({
+    const review = await db.review.update({
       where: { id },
-      data: updateData
+      data: { status: data.status }
     });
 
     return NextResponse.json(review);
@@ -34,7 +29,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.review.delete({
+    await db.review.delete({
       where: { id }
     });
 

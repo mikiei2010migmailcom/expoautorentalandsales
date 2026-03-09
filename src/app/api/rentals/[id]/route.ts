@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // PUT - Update rental application status
 export async function PUT(
@@ -15,7 +13,7 @@ export async function PUT(
     const updateData: any = {};
     if (data.status) updateData.status = data.status;
 
-    const application = await prisma.rentalApplication.update({
+    const application = await db.rentalApplication.update({
       where: { id },
       data: updateData
     });
@@ -34,7 +32,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.rentalApplication.delete({
+    await db.rentalApplication.delete({
       where: { id }
     });
 

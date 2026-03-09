@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all purchase applications
 export async function GET(request: NextRequest) {
   try {
-    const applications = await prisma.purchaseApplication.findMany({
+    const applications = await db.purchaseApplication.findMany({
       include: { vehicle: true },
       orderBy: { createdAt: 'desc' }
     });
@@ -23,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const application = await prisma.purchaseApplication.create({
+    const application = await db.purchaseApplication.create({
       data: {
         customerName: data.customerName,
         customerPhone: data.customerPhone,

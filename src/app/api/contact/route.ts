@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all contact inquiries
 export async function GET(request: NextRequest) {
   try {
-    const inquiries = await prisma.contactInquiry.findMany({
+    const inquiries = await db.contactInquiry.findMany({
       include: { vehicle: true },
       orderBy: { createdAt: 'desc' }
     });
@@ -23,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const inquiry = await prisma.contactInquiry.create({
+    const inquiry = await db.contactInquiry.create({
       data: {
         name: data.name,
         phone: data.phone,

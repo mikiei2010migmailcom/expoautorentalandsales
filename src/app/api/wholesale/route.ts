@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // GET - Fetch all wholesale vehicles
 export async function GET(request: NextRequest) {
   try {
-    const vehicles = await prisma.wholesaleVehicle.findMany({
+    const vehicles = await db.wholesaleVehicle.findMany({
       orderBy: { createdAt: 'desc' }
     });
 
@@ -22,7 +20,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const vehicle = await prisma.wholesaleVehicle.create({
+    const vehicle = await db.wholesaleVehicle.create({
       data: {
         year: parseInt(data.year),
         make: data.make,
@@ -30,7 +28,7 @@ export async function POST(request: NextRequest) {
         price: parseFloat(data.price),
         mileage: parseInt(data.mileage),
         location: data.location,
-        radius: parseInt(data.radius),
+        radius: parseInt(data.radius) || 250,
         images: JSON.stringify(data.images || []),
         description: data.description || null,
         status: 'available'

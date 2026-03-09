@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // PUT - Update wholesale vehicle
 export async function PUT(
@@ -24,7 +22,7 @@ export async function PUT(
     if (data.description !== undefined) updateData.description = data.description || null;
     if (data.status) updateData.status = data.status;
 
-    const vehicle = await prisma.wholesaleVehicle.update({
+    const vehicle = await db.wholesaleVehicle.update({
       where: { id },
       data: updateData
     });
@@ -43,7 +41,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.wholesaleVehicle.delete({
+    await db.wholesaleVehicle.delete({
       where: { id }
     });
 

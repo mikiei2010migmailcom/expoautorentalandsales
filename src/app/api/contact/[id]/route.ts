@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { db } from '@/lib/db';
 
-const prisma = new PrismaClient();
-
-// PUT - Mark inquiry as read
+// PUT - Mark inquiry as read/unread
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -15,7 +13,7 @@ export async function PUT(
     const updateData: any = {};
     if (data.read !== undefined) updateData.read = data.read;
 
-    const inquiry = await prisma.contactInquiry.update({
+    const inquiry = await db.contactInquiry.update({
       where: { id },
       data: updateData
     });
@@ -34,7 +32,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.contactInquiry.delete({
+    await db.contactInquiry.delete({
       where: { id }
     });
 
