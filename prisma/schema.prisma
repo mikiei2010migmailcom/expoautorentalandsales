@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider  = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -23,60 +23,65 @@ model Vehicle {
   engine        String?
   transmission  String?
   fuelType      String?
-  condition     String?  // Excellent, Good, Fair, Poor
-  vehicleType   String   // Sedan, SUV, Truck, Sports, Van
-  status        String   // For Sale, For Rent, Both
+  condition     String?
+  vehicleType   String
+  status        String   @default("pending")
   dailyRate     Float?
   weeklyRate    Float?
-  featured      Boolean  @default(false)
-  images        String   // JSON array of image URLs
+  featured       Boolean @default(false)
+  images        String   @default("[]")
   description   String?
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  // Relations
-  inquiries     ContactInquiry[]
-  rentalApps    RentalApplication[]
-  purchaseApps  PurchaseApplication[]
-}
 
-model ContactInquiry {
-  id          String   @id @default(cuid())
-  name        String
-  phone       String
-  email       String?
-  vehicleId   String?
-  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id])
-  message     String
-  read        Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  @@index([make, model])
+  @@index([status])
+  @@index([vehicleType])
 }
 
 model Review {
-  id          String   @id @default(cuid())
-  name        String
-  rating      Int      // 1-5
-  text        String
-  status      String   @default("pending") // pending, approved
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String
+  rating    Int
+  text      String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
+
+model ContactInquiry {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  vehicleId String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([read])
+  @@index([vehicleId])
 }
 
 model RentalApplication {
-  id              String   @id @default(cuid())
-  customerName    String
-  customerPhone   String
-  customerEmail   String
-  customerAddress String
-  driverLicense   String?
-  vehicleId       String
-  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
-  startDate       String
-  endDate         String
-  hasInsurance    Boolean
-  insuranceDoc    String?  // URL to uploaded insurance document
-  dealerInsurance Float?   // Cost of dealer-provided insurance
-  agreedToTerms   Boolean
-  status          String   @default("pending") // pending, approved, rejected
-  createdAt       DateTime @default(now())
+  id               String   @id @default(cuid())
+  customerName     String
+  customerPhone    String
+  customerEmail     String
+  customerAddress  String
+  driverLicense    String?
+  vehicleId        String
+  startDate        DateTime
+  endDate          DateTime
+  hasInsurance     Boolean  @default(false)
+  insuranceDoc     String?
+  dealerInsurance  Float?
+  agreedToTerms    Boolean  @default(false)
+  status           String   @default("pending")
+  createdAt        DateTime @default(now())
+
+  @@index([status])
+  @@index([vehicleId])
 }
 
 model PurchaseApplication {
@@ -86,10 +91,12 @@ model PurchaseApplication {
   customerEmail   String
   customerAddress String
   vehicleId       String
-  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
-  agreedToTerms   Boolean
+  agreedToTerms   Boolean  @default(false)
   status          String   @default("pending")
   createdAt       DateTime @default(now())
+
+  @@index([status])
+  @@index([vehicleId])
 }
 
 model WholesaleVehicle {
@@ -100,11 +107,14 @@ model WholesaleVehicle {
   price       Float
   mileage     Int
   location    String
-  radius      Int      // miles from Lafayette
-  images      String   // JSON array
+  radius      Int      @default(250)
+  images      String   @default("[]")
   description String?
   status      String   @default("available")
   createdAt   DateTime @default(now())
+
+  @@index([status])
+  @@index([location])
 }
 
 model AdminUser {
