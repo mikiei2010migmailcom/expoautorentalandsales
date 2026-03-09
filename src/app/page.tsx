@@ -253,10 +253,6 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin'}
-              className="border-red-500 text-red-500">
-              <Settings className="h-4 w-4 mr-1" />Admin
-            </Button>
           </div>
           <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -272,10 +268,6 @@ function Navigation({
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin'}
-              className="w-full border-red-500 text-red-500">
-              <Settings className="h-4 w-4 mr-1" />Admin
-            </Button>
           </div>
         </div>
       )}
