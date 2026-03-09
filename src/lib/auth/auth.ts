@@ -4,10 +4,10 @@ import crypto from 'crypto';
 
 // Admin credentials - in production, these should be in environment variables
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || hashPassword('TopAuto2024!');
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || hashPassword('ExpoAuto2024!');
 
 // Session secret for signing tokens
-const SESSION_SECRET = process.env.SESSION_SECRET || 'top-auto-rentals-secret-key-2024';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'expo-auto-rentals-secret-key-2024';
 
 // Hash password using SHA-256
 export function hashPassword(password: string): string {
