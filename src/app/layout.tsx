@@ -14,24 +14,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Top Auto Rental & Sales LLC | Quality Pre-Owned Vehicles in Lafayette, LA",
-  description: "Top Auto Rental & Sales LLC offers quality pre-owned vehicles for sale and rent in Lafayette, LA. Browse our inventory of sedans, SUVs, trucks, and more. Flexible rental options available. Visit us at 815 SW Evangeline Thruway.",
-  keywords: ["used cars Lafayette LA", "car rental Lafayette", "pre-owned vehicles", "auto sales Louisiana", "truck rental", "SUV for sale", "affordable cars", "Top Auto Rental", "vehicle financing", "used car dealership", "expo auto"],
-  authors: [{ name: "Top Auto Rental & Sales LLC" }],
+  title: "Expo Auto Rental & Sales LLC | Quality Pre-Owned Vehicles in Lafayette, LA",
+  description: "Expo Auto Rental & Sales LLC offers quality pre-owned vehicles for sale and rent in Lafayette, LA. Browse our inventory of sedans, SUVs, trucks, and more. Flexible rental options available. Visit us at 815 SW Evangeline Thruway.",
+  keywords: ["used cars Lafayette LA", "car rental Lafayette", "pre-owned vehicles", "auto sales Louisiana", "truck rental", "SUV for sale", "affordable cars", "Expo Auto Rental", "vehicle financing", "used car dealership", "expo auto"],
+  authors: [{ name: "Expo Auto Rental & Sales LLC" }],
   icons: {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Top Auto Rental & Sales LLC | Quality Pre-Owned Vehicles",
+    title: "Expo Auto Rental & Sales LLC | Quality Pre-Owned Vehicles",
     description: "Quality pre-owned vehicles for sale and rent in Lafayette, LA. Flexible options to suit your needs.",
     url: "https://expoautorentalandsales.com",
-    siteName: "Top Auto Rental & Sales LLC",
+    siteName: "Expo Auto Rental & Sales LLC",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Top Auto Rental & Sales LLC",
+    title: "Expo Auto Rental & Sales LLC",
     description: "Quality pre-owned vehicles for sale and rent in Lafayette, LA",
   },
   robots: {
@@ -47,10 +47,10 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AutoDealer",
-  "name": "Top Auto Rental & Sales LLC",
+  "name": "Expo Auto Rental & Sales LLC",
   "image": "https://expoautorentalandsales.com/logo.svg",
   "url": "https://expoautorentalandsales.com",
-  "telephone": "337-706-7863",
+  "telephone": "337-210-5046",
   "email": "nzenon@expoautos.net",
   "address": {
     "@type": "PostalAddress",

@@ -167,7 +167,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Car className="h-8 w-8 text-red-500" />
-            <div><h1 className="text-white font-bold text-lg">Admin Dashboard</h1><p className="text-gray-500 text-sm">Top Auto Rental & Sales</p></div>
+            <div><h1 className="text-white font-bold text-lg">Admin Dashboard</h1><p className="text-gray-500 text-sm">Expo Auto Rental & Sales</p></div>
           </div>
           <Button onClick={handleLogout} variant="outline" className="border-gray-700 text-gray-300"><LogOut className="h-4 w-4 mr-2" /> Logout</Button>
         </div>
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
       <Dialog open={showVehicleForm} onOpenChange={setShowVehicleForm}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700">
           <DialogHeader><DialogTitle className="text-white">{editingVehicle ? 'Edit' : 'Add'} Vehicle</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); editingVehicle ? handleUpdateVehicle() : handleAddVehicle(); }}>
+          <form onSubmit={(e) => { e.preventDefault(); if (editingVehicle) { handleUpdateVehicle(); } else { handleAddVehicle(); } }}>
             <div className="grid grid-cols-2 gap-4">
               <div><Label className="text-gray-300">Year *</Label><Input value={vehicleForm.year} onChange={e => setVehicleForm({ ...vehicleForm, year: e.target.value })} className="bg-gray-700 border-gray-600 text-white" required /></div>
               <div><Label className="text-gray-300">Make *</Label><Input value={vehicleForm.make} onChange={e => setVehicleForm({ ...vehicleForm, make: e.target.value })} className="bg-gray-700 border-gray-600 text-white" required /></div>

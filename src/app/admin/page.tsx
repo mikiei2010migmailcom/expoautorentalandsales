@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
               <Car className="h-8 w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-white">Top Auto Rental & Sales</h1>
+          <h1 className="text-2xl font-bold text-white">Expo Auto Rental & Sales</h1>
           <p className="text-gray-400 mt-2">Admin Portal</p>
         </div>
 
@@ -114,7 +114,7 @@ export default function AdminLoginPage() {
         </Card>
 
         <p className="text-center text-gray-500 text-sm mt-6">
-          © {new Date().getFullYear()} Top Auto Rental & Sales LLC
+          © {new Date().getFullYear()} Expo Auto Rental & Sales LLC
         </p>
       </div>
     </div>

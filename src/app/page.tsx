@@ -116,9 +116,9 @@ interface WholesaleVehicle {
 
 // Business Info
 const BUSINESS_INFO = {
-  name: "Top Auto Rental & Sales LLC",
+  name: "Expo Auto Rental & Sales LLC",
   address: "815 SW Evangeline Thruway, Lafayette, LA 70501",
-  phone: "337-706-7863",
+  phone: "337-210-5046",
   email: "nzenon@expoautos.net",
   hours: "Mon-Fri: 9AM-6PM | Sat: 10AM-4PM | Sun: Closed"
 };
@@ -129,9 +129,9 @@ LOUISIANA VEHICLE PURCHASE AGREEMENT
 
 This Vehicle Purchase Agreement ("Agreement") is entered into on this date between:
 
-SELLER: Top Auto Rental & Sales LLC
+SELLER: Expo Auto Rental & Sales LLC
 Address: 815 SW Evangeline Thruway, Lafayette, LA 70501
-Phone: 337-706-7863
+Phone: 337-210-5046
 Email: nzenon@expoautos.net
 
 BUYER: [Customer Name]
@@ -173,9 +173,9 @@ LOUISIANA VEHICLE RENTAL AGREEMENT
 
 This Vehicle Rental Agreement ("Agreement") is entered into on this date between:
 
-LESSOR: Top Auto Rental & Sales LLC
+LESSOR: Expo Auto Rental & Sales LLC
 Address: 815 SW Evangeline Thwy, Lafayette, LA 70501
-Phone: 337-706-7863
+Phone: 337-210-5046
 Email: nzenon@expoautos.net
 
 LESSEE: [Customer Name]

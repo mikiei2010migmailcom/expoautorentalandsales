@@ -228,7 +228,7 @@ export default function PurchaseAgreementModal({
                     
                     <p><strong>PARTIES:</strong></p>
                     <p>This Vehicle Purchase Agreement (&quot;Agreement&quot;) is entered into between:</p>
-                    <p><strong>SELLER:</strong> Top Auto Rental & Sales LLC, located at 815 SW Evangeline Thruway, Lafayette, LA 70501</p>
+                    <p><strong>SELLER:</strong> Expo Auto Rental & Sales LLC, located at 815 SW Evangeline Thruway, Lafayette, LA 70501</p>
                     <p><strong>BUYER:</strong> {formData.customerName}, of {formData.customerAddress}</p>
                     
                     <p><strong>VEHICLE DESCRIPTION:</strong></p>

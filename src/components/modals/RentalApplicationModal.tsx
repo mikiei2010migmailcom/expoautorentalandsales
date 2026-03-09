@@ -389,7 +389,7 @@ export default function RentalApplicationModal({
                     
                     <p><strong>PARTIES:</strong></p>
                     <p>This Vehicle Rental Agreement (&quot;Agreement&quot;) is entered into between:</p>
-                    <p><strong>OWNER:</strong> Top Auto Rental & Sales LLC, 815 SW Evangeline Thruway, Lafayette, LA 70501</p>
+                    <p><strong>OWNER:</strong> Expo Auto Rental & Sales LLC, 815 SW Evangeline Thruway, Lafayette, LA 70501</p>
                     <p><strong>RENTER:</strong> {formData.customerName}, of {formData.customerAddress}</p>
                     
                     <p><strong>VEHICLE:</strong></p>

@@ -293,7 +293,7 @@ export default function VehicleDetailModal({
                 variant="outline"
                 className="border-zinc-700 text-gray-300 hover:bg-zinc-800"
               >
-                <a href="tel:337-706-7863">
+                <a href="tel:337-210-5046">
                   <Phone className="w-4 h-4 mr-2" />
                   Call Us
                 </a>

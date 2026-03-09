@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, X, Car, Phone, Mail, MapPin, LogIn } from 'lucide-react';
+import { Menu, X, Car, Phone, Mail, MapPin, Settings } from 'lucide-react';
 
 const navLinks = [
   { href: '#home', label: 'Home' },
@@ -47,9 +47,9 @@ export default function Header() {
         <div className="hidden md:block bg-gradient-to-r from-red-600 to-red-700 text-white py-1.5">
           <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
             <div className="flex items-center gap-6">
-              <a href="tel:337-706-7863" className="flex items-center gap-2 hover:text-red-200 transition-colors">
+              <a href="tel:337-210-5046" className="flex items-center gap-2 hover:text-red-200 transition-colors">
                 <Phone className="w-3.5 h-3.5" />
-                337-706-7863
+                337-210-5046
               </a>
               <a href="mailto:nzenon@expoautos.net" className="flex items-center gap-2 hover:text-red-200 transition-colors">
                 <Mail className="w-3.5 h-3.5" />
@@ -75,7 +75,7 @@ export default function Header() {
                 <Car className="w-7 h-7 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-white tracking-tight">TOP AUTO</span>
+                <span className="text-xl font-bold text-white tracking-tight">EXPO AUTO</span>
                 <span className="text-xs text-red-500 font-medium tracking-widest">RENTAL & SALES LLC</span>
               </div>
             </Link>
@@ -97,15 +97,6 @@ export default function Header() {
 
             {/* Actions */}
             <div className="hidden lg:flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsAdminOpen(true)}
-                className="text-gray-400 hover:text-white hover:bg-white/10"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin
-              </Button>
               <Button
                 onClick={() => scrollToSection('#inventory')}
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6"
@@ -129,7 +120,7 @@ export default function Header() {
                         <Car className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <span className="text-lg font-bold">TOP AUTO</span>
+                        <span className="text-lg font-bold">EXPO AUTO</span>
                         <span className="block text-xs text-red-500">RENTAL & SALES</span>
                       </div>
                     </div>
@@ -153,14 +144,6 @@ export default function Header() {
 
                   <div className="space-y-4 pt-6 border-t border-zinc-800">
                     <Button
-                      onClick={() => setIsAdminOpen(true)}
-                      variant="outline"
-                      className="w-full border-zinc-700 text-gray-300 hover:text-white hover:bg-white/5"
-                    >
-                      <Shield className="w-4 h-4 mr-2" />
-                      Admin Panel
-                    </Button>
-                    <Button
                       onClick={() => scrollToSection('#inventory')}
                       className="w-full bg-red-600 hover:bg-red-700"
                     >
@@ -169,9 +152,9 @@ export default function Header() {
                   </div>
 
                   <div className="pt-6 space-y-3 text-sm text-gray-400">
-                    <a href="tel:337-706-7863" className="flex items-center gap-2">
+                    <a href="tel:337-210-5046" className="flex items-center gap-2">
                       <Phone className="w-4 h-4" />
-                      337-706-7863
+                      337-210-5046
                     </a>
                     <a href="mailto:nzenon@expoautos.net" className="flex items-center gap-2">
                       <Mail className="w-4 h-4" />
@@ -189,8 +172,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Admin Panel */}
-      <AdminPanel open={isAdminOpen} onOpenChange={setIsAdminOpen} />
     </>
   );
 }
