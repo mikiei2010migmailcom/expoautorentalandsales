@@ -1,20 +1,41 @@
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
+import { db } from './db';
 
 // Session secret for signing tokens
 const SESSION_SECRET = process.env.SESSION_SECRET || 'expo-auto-rentals-secret-key-2024';
 
-// Admin credentials - computed lazily to avoid build-time issues
-function getAdminCredentials() {
-  return {
-    username: process.env.ADMIN_USERNAME || 'admin',
-    passwordHash: process.env.ADMIN_PASSWORD_HASH || hashPassword('ExpoAuto2024!')
-  };
-}
-
 // Hash password using SHA-256
 export function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password).digest('hex');
+}
+
+// Verify credentials - checks both env vars and database
+export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+  const hashedPassword = hashPassword(password);
+  
+  // First check environment variables (default admin)
+  const envUsername = process.env.ADMIN_USERNAME || 'admin';
+  const envPasswordHash = process.env.ADMIN_PASSWORD_HASH || hashPassword('ExpoAuto2024!');
+  
+  if (username === envUsername && hashedPassword === envPasswordHash) {
+    return true;
+  }
+  
+  // Then check database for additional admin users
+  try {
+    const adminUser = await db.adminUser.findUnique({
+      where: { email: username }
+    });
+    
+    if (adminUser && adminUser.password === hashedPassword) {
+      return true;
+    }
+  } catch (error) {
+    console.error('Error checking admin credentials:', error);
+  }
+  
+  return false;
 }
 
 // Create session token
@@ -57,12 +78,6 @@ export function verifySessionToken(token: string): { username: string; exp: numb
   } catch {
     return null;
   }
-}
-
-// Verify credentials
-export function verifyCredentials(username: string, password: string): boolean {
-  const creds = getAdminCredentials();
-  return username === creds.username && hashPassword(password) === creds.passwordHash;
 }
 
 // Get current session from cookies

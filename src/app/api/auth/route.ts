@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Username and password are required' }, { status: 400 });
     }
 
-    if (verifyCredentials(username, password)) {
+    if (await verifyCredentials(username, password)) {
       const token = createSessionToken(username);
       await setSessionCookie(token);
       return NextResponse.json({ success: true, message: 'Login successful' });
